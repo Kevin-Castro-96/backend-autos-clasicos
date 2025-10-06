@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes";
@@ -6,6 +8,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUiAssetPath from "swagger-ui-dist";
 import { initDataSource } from "./config/data-source";
+import path from "path";
 
 const app = express();
 app.use(cors());
@@ -18,7 +21,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// Swagger setup con opciones para mostrar ejemplos
+// Swagger setup
 const swaggerSpec = swaggerJsdoc({
   definition: {
     openapi: "3.0.0",
@@ -30,7 +33,7 @@ const swaggerSpec = swaggerJsdoc({
     },
     servers: [
       {
-        url: "https://back-autos-clasicos.vercel.app",
+        url: process.env.BASE_URL || "http://localhost:3000",
       },
     ],
     components: {
@@ -44,26 +47,36 @@ const swaggerSpec = swaggerJsdoc({
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ["./src/routes/*.js", "./src/controllers/*.js"],
+  // ⚠️ Apuntar a los archivos .js compilados en producción
+  apis: [
+    path.join(__dirname, "routes/*.js"),
+    path.join(__dirname, "controllers/*.js"),
+  ],
 });
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  explorer: true,
-  swaggerOptions: {},
-  customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.6.0/swagger-ui.css",
-  customJs: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.6.0/swagger-ui.js"
-}));
-// routes
+// Swagger UI con assets locales de swagger-ui-dist
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+    customCssUrl: `${swaggerUiAssetPath}/swagger-ui.css`,
+    customJs: `${swaggerUiAssetPath}/swagger-ui-bundle.js`,
+  })
+);
+
+// Rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/cars", carRoutes);
 
 const PORT = process.env.PORT || 3000;
+
 initDataSource()
   .then(() => {
     app.listen(PORT, () =>
-      console.log(`Local server running on http://localhost:${PORT}`)
+      console.log(`Servidor corriendo en http://localhost:${PORT}`)
     );
   })
   .catch((err) => {
-    console.error("DB init error", err);
+    console.error("Error inicializando DB:", err);
   });
