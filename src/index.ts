@@ -51,8 +51,8 @@ const swaggerSpec = swaggerJsdoc({
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   explorer: true,
   swaggerOptions: {},
-  customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.19.0/swagger-ui.min.css",
-  customJs: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.19.0/swagger-ui-bundle.min.js"
+  customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.6.0/swagger-ui.css",
+  customJs: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.29.1/swagger-ui.js"
 }));
 // routes
 app.use("/api/auth", authRoutes);
