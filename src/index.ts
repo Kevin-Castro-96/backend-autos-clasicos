@@ -49,8 +49,10 @@ const swaggerSpec = swaggerJsdoc({
 });
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  swaggerOptions: { urls: [] },
-  customCssUrl: `${swaggerUiAssetPath.getAbsoluteFSPath()}/swagger-ui.css`,
+  explorer: true,
+  swaggerOptions: {},
+  customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.19.0/swagger-ui.min.css",
+  customJs: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.19.0/swagger-ui-bundle.min.js"
 }));
 // routes
 app.use("/api/auth", authRoutes);
@@ -60,7 +62,7 @@ const PORT = process.env.PORT || 3000;
 initDataSource()
   .then(() => {
     app.listen(PORT, () =>
-      console.log(`Server running on http://localhost:${PORT}`)
+      console.log(`Local server running on http://localhost:${PORT}`)
     );
   })
   .catch((err) => {
