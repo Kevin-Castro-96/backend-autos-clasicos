@@ -31,7 +31,6 @@ const swaggerSpec = swaggerJsdoc({
     servers: [
       {
         url: "https://back-autos-clasicos.vercel.app",
-        description: "Servidor en vercel",
       },
     ],
     components: {
@@ -45,7 +44,7 @@ const swaggerSpec = swaggerJsdoc({
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ["./src/routes/*.ts", "./src/controllers/*.ts"],
+  apis: ["./src/routes/*.ss", "./src/controllers/*.js"],
 });
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
