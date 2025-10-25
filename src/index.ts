@@ -44,15 +44,15 @@ const swaggerSpec = swaggerJsdoc({
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ["./src/routes/*.js", "./src/controllers/*.js"],
+  apis: ["./dist/routes/*.js", "./dist/controllers/*.js"],
 });
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  explorer: true,
-  swaggerOptions: {},
-  customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.6.0/swagger-ui.css",
-  customJs: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.29.1/swagger-ui.js"
-}));
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, { explorer: true })
+);
+
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/cars", carRoutes);

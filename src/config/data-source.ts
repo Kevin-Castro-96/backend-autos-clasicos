@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "../entities/User";
 import { Car } from "../entities/Car";
+require("dotenv").config();
 
 const DATABASE_URL = process.env.DATABASE_URL;
 

@@ -20,3 +20,14 @@ export async function updateCar(carId: string, userId: string, updates: Partial<
 export async function listCars() {
   return AppDataSource.getRepository(Car).find({ relations: ["owner"] });
 }
+
+export async function carByIdService(id: string) {
+  const repo = AppDataSource.getRepository(Car);
+  const car = await repo.findOne({
+    where: { id },
+    relations: ["owner"],
+  });
+  if (!car) throw new Error("Car not found");
+  return car;
+}
+

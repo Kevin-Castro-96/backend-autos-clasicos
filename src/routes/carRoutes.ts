@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { addCar, editCar, getCars } from "../controllers/carController";
+import {
+  addCar,
+  editCar,
+  getCars,
+  getCarById,
+} from "../controllers/carController";
 import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -15,6 +20,40 @@ const router = Router();
  *         description: Listado de autos
  */
 router.get("/", getCars);
+
+/**
+ * @openapi
+ * /api/cars/{id}:
+ *   get:
+ *     summary: Obtener un auto por su ID
+ *     tags: [Cars]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del auto a obtener
+ *     responses:
+ *       200:
+ *         description: Auto encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Auto obtenido por ID
+ *                 data:
+ *                   $ref: '#/components/schemas/Car'
+ *       404:
+ *         description: Auto no encontrado
+ */
+router.get("/:id", getCarById);
 
 /**
  * @openapi
