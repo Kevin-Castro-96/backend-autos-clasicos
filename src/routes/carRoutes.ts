@@ -4,6 +4,7 @@ import {
   editCar,
   getCars,
   getCarById,
+  deleteCar,
 } from "../controllers/carController";
 import { authMiddleware } from "../middleware/authMiddleware";
 
@@ -131,5 +132,30 @@ router.post("/", authMiddleware, addCar);
  *         description: No autorizado
  */
 router.put("/:id", authMiddleware, editCar);
+/**
+ * @openapi
+ * /api/cars/{id}:
+ *   delete:
+ *     summary: Eliminar un auto existente
+ *     tags: [Cars]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del auto a eliminar
+ *     responses:
+ *       200:
+ *         description: Auto eliminado correctamente
+ *       403:
+ *         description: No autorizado
+ *       404:
+ *         description: Auto no encontrado
+ */
+router.delete("/:id", authMiddleware, deleteCar);
+
 
 export default router;

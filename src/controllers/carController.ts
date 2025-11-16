@@ -5,6 +5,7 @@ import {
   updateCar,
   listCars,
   carByIdService,
+  deleteCarService,
 } from "../services/carService";
 import { success, fail } from "../utils/responseHelper";
 
@@ -65,5 +66,26 @@ export async function getCarById(req: Request, res: Response) {
     return res
       .status(status)
       .json(fail(status, err.message || "Error obteniendo auto por ID"));
+  }
+}
+
+export async function deleteCar(req: Request, res: Response) {
+  try {
+    await initDataSource();
+    const user = (req as any).user;
+    const { id } = req.params;
+
+    const result = await deleteCarService(id, user.id);
+    return res.json(success(200, "Auto eliminado correctamente", result));
+  } catch (err: any) {
+    const status =
+      err.message === "Car not found"
+        ? 404
+        : err.message === "Not authorized"
+        ? 403
+        : 500;
+    return res
+      .status(status)
+      .json(fail(status, err.message || "Error eliminando auto"));
   }
 }

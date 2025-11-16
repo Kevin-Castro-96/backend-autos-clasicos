@@ -31,3 +31,14 @@ export async function carByIdService(id: string) {
   return car;
 }
 
+export async function deleteCarService(carId: string, userId: string) {
+  const repo = AppDataSource.getRepository(Car);
+  const car = await repo.findOne({ where: { id: carId }, relations: ["owner"] });
+
+  if (!car) throw new Error("Car not found");
+  if (car.owner.id !== userId) throw new Error("Not authorized");
+
+  await repo.remove(car);
+  return { id: carId };
+}
+
